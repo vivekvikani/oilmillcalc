@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="VersionNumber">2.1</string>
+    <string name="app_name">Oil Mill Calculator</string>
+    <string name="title_section1">Groundnut</string>
+    <string name="title_section2">Cotton Seed</string>
+    <string name="title_section3">Rapseed</string>
+    <string name="title_section4">Castor</string>
+    <string name="title_section5">Maize</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">About Us</string>
+    <string name="title_activity_about_us">About Us</string>
+    <!--<string name="action_settings">Settings</string>-->
+
+    <string name="forward">Forward</string>
+    <string name="reverse">Reverse</string>
+
+    <string name="rs400kg">Rs./400 Kgs.</string>
+    <string name="rsTon">Rs./Ton</string>
+    <string name="rsUnit">Rs./20 Kgs.</string>
+    <string name="rsBag">Rs./Bag</string>
+    <string name="rskg">Rs./Kg.</string>
+    <string name="rsQtl">Rs./Quintal</string>
+    <string name="rsCandy">Rs./Candy</string>
+    <string name="rs40kg">Rs./40 Kgs.</string>
+    <string name="rs20kg">Rs./20 Kgs.</string>
+    <string name="rs10kg">Rs./10 Kgs.</string>
+    <string name="rs15kg">Rs./15 Kgs.</string>
+    <string name="rsMaund">Rs./Maund</string>
+    <string name="rs">Rs</string>
+    <string name="kg">Kgs</string>
+
+    <string-array name="navItems">
+        <item>Groundnut</item>
+        <item>Cotton Seed</item>
+        <item>Rapseed</item>
+        <item>Castor</item>
+        <item>Maize</item>
+
+    </string-array>
+
+    <string name="parse_app_id">hmnwgjOQDOOWvEaQZH1fqyh1YRQtPgu74VsJiGES</string>
+    <string name="parse_client_key">Ev8L2yoavyAmnDw6xN8BrcpXTTBwF0TbCoRravKO</string>
+    <!--7ngX6wo9vHWTDVVRpa9gfoy3cx3QRGpyv3eHIlqQ
+    1nCCmWPKHTOZTSyUibR2VgeKGnOBKXmuRcPLGshJ-->
+</resources>

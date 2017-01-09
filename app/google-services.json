@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "587461399288",
+    "firebase_url": "https://oil-mill-calculator.firebaseio.com",
+    "project_id": "oil-mill-calculator",
+    "storage_bucket": "oil-mill-calculator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:587461399288:android:ec4e895623ac27f1",
+        "android_client_info": {
+          "package_name": "com.oil.vivek.oilmillcalc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "587461399288-gq48vlqjt5cvci157bjmblccged62vn3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [{ "current_key": "" }],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
