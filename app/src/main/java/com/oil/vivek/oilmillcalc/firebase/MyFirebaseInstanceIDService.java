@@ -1,12 +1,17 @@
 package com.oil.vivek.oilmillcalc.firebase;
 
+
+import android.content.SharedPreferences;
+import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.oil.vivek.oilmillcalc.MainActivity;
 
 
-public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
+public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService{
 
     private static final String TAG = "MyFirebaseIIDService";
 
@@ -25,19 +30,12 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        sendRegistrationToServer(refreshedToken);
+        SharedPreferences appdata = PreferenceManager.getDefaultSharedPreferences(MyFirebaseInstanceIDService.this);
+        SharedPreferences.Editor editor = appdata.edit();
+        editor.putString("firebase_token", refreshedToken);
+        editor.commit();
     }
     // [END refresh_token]
 
-    /**
-     * Persist token to third-party servers.
-     *
-     * Modify this method to associate the user's FCM InstanceID token with any server-side account
-     * maintained by your application.
-     *
-     * @param token The new token.
-     */
-    private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
-    }
+
 }

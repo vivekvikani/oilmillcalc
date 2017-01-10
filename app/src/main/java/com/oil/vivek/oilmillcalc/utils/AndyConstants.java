@@ -58,6 +58,7 @@ public class AndyConstants {
         public static final int LOGIN = 2;
         public static final int CHECKVERSION = 3;
         public static final int CHECKIMEI = 4;
+        public static final int REGISTERTOKEN = 5;
 
     }
 
@@ -69,6 +70,7 @@ public class AndyConstants {
         public static final String REGISTERATION = BASE_URL + "register.php";
         public static final String CHECKVERSION = BASE_URL + "checkversion.php";
         public static final String CHECKIMEI = BASE_URL + "checkIMEI.php";
+        public static final String REGISTERTOKEN = BASE_URL + "registertoken.php";
 
     }
     // webservice key constants
@@ -91,7 +93,7 @@ public class AndyConstants {
         public static final String DAYS_LEFT = "days_left";
         public static final String INSTALL_DATE = "install_date";
         public static final String CITY = "city";
-        public static final String OTP = "otp";
+        public static final String TOKEN = "token";
         public static final String ID = "id";
         public static final String VERSION = "version";
         public static final String VERSIONDB = "versionDB";

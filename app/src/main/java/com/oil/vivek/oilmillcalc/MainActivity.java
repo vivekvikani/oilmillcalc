@@ -27,6 +27,7 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
 //import com.oilCalc.vivek.oilmillcalc.R;
+import com.google.firebase.crash.FirebaseCrash;
 import com.oil.vivek.oilmillcalc.htmlparse.AsyncTaskCompleteListener;
 import com.oil.vivek.oilmillcalc.htmlparse.HttpRequester;
 import com.oil.vivek.oilmillcalc.htmlparse.ParseContent;
@@ -167,6 +168,7 @@ public class MainActivity extends ActionBarActivity
                 }
             }
         }; thread.start();
+        FirebaseCrash.report(new Exception("My first Android non-fatal error"));
     }
 
     private void decreaseDaysLeftinSP()
@@ -178,7 +180,7 @@ public class MainActivity extends ActionBarActivity
         int todayDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         int lastAccessDayOfMonth = appdata.getInt("lastAccessDayofMonth", 0);
         System.out.println("Last Access Day: "  +lastAccessDayOfMonth);
-        if(todayDayOfMonth != lastAccessDayOfMonth)
+        if(todayDayOfMonth != lastAccessDayOfMonth && lastAccessDayOfMonth != 0)
         {
             daysLeft = appdata.getInt("daysLeft", 0);
             System.out.println("DAYS LEFT :" +daysLeft);

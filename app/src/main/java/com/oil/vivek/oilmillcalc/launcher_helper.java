@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -62,7 +61,6 @@ public class launcher_helper extends ActionBarActivity implements AsyncTaskCompl
                 final SharedPreferences.Editor editor = appdata.edit();
                 if(appdata.getBoolean("compulsoryUpdate",false))
                 {
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(launcher_helper.this);
                     builder.setCancelable(false);
                     builder.setTitle("New Version Available");
@@ -193,6 +191,7 @@ public class launcher_helper extends ActionBarActivity implements AsyncTaskCompl
     }
 
     public boolean isGooglePlayServicesAvailable(Activity activity) {
+        System.out.println("PLAY SERVICE CHECK");
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         int status = googleApiAvailability.isGooglePlayServicesAvailable(activity);
         if(status != ConnectionResult.SUCCESS) {

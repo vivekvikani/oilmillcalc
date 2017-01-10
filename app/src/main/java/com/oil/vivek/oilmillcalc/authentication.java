@@ -156,19 +156,19 @@ public class authentication extends ActionBarActivity implements View.OnClickLis
                     authentication.this);
             progress.dismiss();
             return;
+        }else{
+            HashMap<String, String> map = new HashMap<String, String>();
+            map.put(AndyConstants.URL, AndyConstants.ServiceType.REGISTERATION);
+
+            map.put(AndyConstants.Params.IMEI, IMEI);
+            map.put(AndyConstants.Params.VERSION, VersionNumber);
+            map.put(AndyConstants.Params.DAYS_LEFT, String.valueOf(daysLeft));
+            map.put(AndyConstants.Params.NAME, name);
+            map.put(AndyConstants.Params.MOBILE, number);
+            map.put(AndyConstants.Params.CITY, "Location Disabled");
+            new HttpRequester(authentication.this, map,
+                    AndyConstants.ServiceCode.REGISTER, this);
         }
-
-        HashMap<String, String> map = new HashMap<String, String>();
-        map.put(AndyConstants.URL, AndyConstants.ServiceType.REGISTERATION);
-
-        map.put(AndyConstants.Params.IMEI, IMEI);
-        map.put(AndyConstants.Params.VERSION, VersionNumber);
-        map.put(AndyConstants.Params.DAYS_LEFT, String.valueOf(daysLeft));
-        map.put(AndyConstants.Params.NAME, name);
-        map.put(AndyConstants.Params.MOBILE, number);
-        map.put(AndyConstants.Params.CITY, "Location Disabled");
-        new HttpRequester(authentication.this, map,
-                AndyConstants.ServiceCode.REGISTER, this);
     }
 
     @Override
