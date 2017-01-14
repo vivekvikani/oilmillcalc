@@ -89,7 +89,7 @@ public class AndyConstants {
         public static final String IMEI = "imei";
         public static final String NAME = "name";
         public static final String MOBILE = "mobile";
-        public static final String EXP_DATE = "exp_date";
+        public static final String NOTIFICATION_TOKEN = "notification_token";
         public static final String DAYS_LEFT = "days_left";
         public static final String INSTALL_DATE = "install_date";
         public static final String CITY = "city";

@@ -202,13 +202,14 @@ public class MainActivity extends ActionBarActivity
                     MainActivity.this);
             return;
         }
-
+        SharedPreferences appdata = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         HashMap<String, String> map = new HashMap<String, String>();
         map.put(AndyConstants.URL, AndyConstants.ServiceType.LOGIN);
 
         map.put(AndyConstants.Params.IMEI, IMEI);
         map.put(AndyConstants.Params.VERSION, VersionNumber);
         map.put(AndyConstants.Params.DAYS_LEFT, String.valueOf(daysLeft));
+        map.put(AndyConstants.Params.NOTIFICATION_TOKEN, appdata.getString("firebase_token", null));
 
         new HttpRequester(MainActivity.this, map,
                 AndyConstants.ServiceCode.LOGIN, this);

@@ -47,7 +47,6 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".firebase.registerTokentoServer"></activity>
     </application>
 
 </manifest>

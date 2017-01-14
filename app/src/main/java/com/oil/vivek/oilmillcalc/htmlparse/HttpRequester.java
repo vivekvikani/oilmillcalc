@@ -169,7 +169,6 @@ public class HttpRequester {
             if (mAsynclistener != null) {
                 mAsynclistener.onTaskCompleted(response, serviceCode);
             }
-
         }
     }
 }
