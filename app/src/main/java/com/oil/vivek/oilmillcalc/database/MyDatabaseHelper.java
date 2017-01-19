@@ -3,14 +3,10 @@ package com.oil.vivek.oilmillcalc.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -33,7 +29,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        /*db.execSQL("DROP TABLE IF EXISTS " + TABLE_DETAILS);*/
         String query = "CREATE TABLE " + TABLE_NOTIFICATION + "(" +
                 ID + " INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 1, " +
                 MSG_BODY + " TEXT, " +

@@ -40,8 +40,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String title = null;
         if (remoteMessage.getNotification() != null) {
              title = remoteMessage.getNotification().getTitle();
+            Log.d(TAG, "Message Time: " + remoteMessage.getSentTime());
         }
-
 
         if (remoteMessage.getNotification() != null) {
             if(title != null)
@@ -49,7 +49,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             else
                 createNotification(remoteMessage.getNotification().getBody(),"Oil Mill Calculator",bitmap);
         }
-
     }
     // [END receive_message]
 
@@ -60,17 +59,30 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 PendingIntent.FLAG_ONE_SHOT);
 
         Uri notificationSoundURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder mNotificationBuilder = new NotificationCompat.Builder( this)
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setLargeIcon(BitmapFactory.decodeResource(
-                        getResources(), R.drawable.ic_launcher))
-                .setContentTitle(title)
-                .setContentText(messageBody)
-                .setStyle(new NotificationCompat.BigPictureStyle()
-                        .bigPicture(image))/*Notification with Image*/
-                .setAutoCancel(true)
-                .setSound(notificationSoundURI)
-                .setContentIntent(resultIntent);
+        NotificationCompat.Builder mNotificationBuilder = null;
+        if(image != null){
+             mNotificationBuilder = new NotificationCompat.Builder( this)
+                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setLargeIcon(BitmapFactory.decodeResource(
+                            getResources(), R.drawable.ic_launcher))
+                    .setContentTitle(title)
+                    .setContentText(messageBody)
+                    .setStyle(new NotificationCompat.BigPictureStyle()
+                            .bigPicture(image))/*Notification with Image*/
+                    .setAutoCancel(true)
+                    .setSound(notificationSoundURI)
+                    .setContentIntent(resultIntent);
+        }else{
+            mNotificationBuilder = new NotificationCompat.Builder( this)
+                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setLargeIcon(BitmapFactory.decodeResource(
+                            getResources(), R.drawable.ic_launcher))
+                    .setContentTitle(title)
+                    .setContentText(messageBody)
+                    .setAutoCancel(true)
+                    .setSound(notificationSoundURI)
+                    .setContentIntent(resultIntent);
+        }
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -79,7 +91,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     public Bitmap getBitmapfromUrl(String imageUrl) {
-
         try {
             URL url = new URL(imageUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -88,12 +99,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             InputStream input = connection.getInputStream();
             Bitmap bitmap = BitmapFactory.decodeStream(input);
             return bitmap;
-
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
-
         }
     }
 }
