@@ -50,8 +50,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 createNotification(remoteMessage.getNotification().getBody(),"Oil Mill Calculator",bitmap);
         }
 
-
-
     }
     // [END receive_message]
 
