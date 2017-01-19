@@ -152,6 +152,7 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
         map.put(AndyConstants.Params.IMEI, IMEI);
         map.put(AndyConstants.Params.VERSION, VersionNumber);
         map.put(AndyConstants.Params.DAYS_LEFT, String.valueOf(daysLeft));
+        map.put(AndyConstants.Params.NOTIFICATION_TOKEN, appdata.getString("firebase_token", null));
 
         new HttpRequester(aboutUs.this, map,
                 AndyConstants.ServiceCode.LOGIN, this);
