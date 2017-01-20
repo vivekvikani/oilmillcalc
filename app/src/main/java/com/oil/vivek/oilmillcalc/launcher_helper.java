@@ -56,69 +56,65 @@ public class launcher_helper extends ActionBarActivity implements AsyncTaskCompl
             };
             thread.start();
 
-            if(!appdata.getString("version", getString(R.string.VersionNumber)).equals(getString(R.string.VersionNumber)))
-            {
-                final SharedPreferences.Editor editor = appdata.edit();
-                if(appdata.getBoolean("compulsoryUpdate",false))
-                {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(launcher_helper.this);
-                    builder.setCancelable(false);
-                    builder.setTitle("New Version Available");
-                    builder.setMessage("Version " + appdata.getString("version", "update") + " is now available. Kindly update to continue using the Oil Mill Calculator");
-                    builder.setNeutralButton("Update", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            editor.putBoolean("updateClicked", true);
-                            editor.commit();
-                            finish();
-                            Intent viewIntent =
-                                    new Intent("android.intent.action.VIEW",
-                                            Uri.parse("https://play.google.com/store/apps/details?id=com.oil.vivek.oilmillcalc"));
-                            startActivity(viewIntent);
-                        }
-                    });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else if(appdata.getBoolean("recommendedUpdate",false))
-                {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(launcher_helper.this);
-                    builder.setCancelable(false);
-                    builder.setTitle("New Version Available");
-                    builder.setMessage("Version " + appdata.getString("version","update") + " is now available. Update to get the latest features");
-                    builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            editor.putBoolean("updateClicked", true);
-                            editor.commit();
-                            finish();
-                            Intent viewIntent =
-                                    new Intent("android.intent.action.VIEW",
-                                            Uri.parse("https://play.google.com/store/apps/details?id=com.oil.vivek.oilmillcalc"));
-                            startActivity(viewIntent);
-                        }
-                    });
-                    builder.setNegativeButton("Skip", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            continueLaunch();
-                        }
-                    });
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                }
-                else
-                {
+            if(!appdata.getString("version", getString(R.string.VersionNumber)).equals(getString(R.string.VersionNumber))) {
+                    final SharedPreferences.Editor editor = appdata.edit();
+                    if (appdata.getBoolean("compulsoryUpdate", false)) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(launcher_helper.this);
+                        builder.setCancelable(false);
+                        builder.setTitle("New Version Available");
+                        builder.setMessage("Version " + appdata.getString("version", "update") + " is now available. Kindly update to continue using the Oil Mill Calculator");
+                        builder.setNeutralButton("Update", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                editor.putBoolean("updateClicked", true);
+                                editor.commit();
+                                finish();
+                                Intent viewIntent =
+                                        new Intent("android.intent.action.VIEW",
+                                                Uri.parse("https://play.google.com/store/apps/details?id=com.oil.vivek.oilmillcalc"));
+                                startActivity(viewIntent);
+                            }
+                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    } else if (appdata.getBoolean("recommendedUpdate", false) && appdata.getInt("skipRemaining",0) == 0) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(launcher_helper.this);
+                        builder.setCancelable(false);
+                        builder.setTitle("New Version Available");
+                        builder.setMessage("Version " + appdata.getString("version", "update") + " is now available. Update to get the latest features");
+                        builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                editor.putBoolean("updateClicked", true);
+                                editor.commit();
+                                finish();
+                                Intent viewIntent =
+                                        new Intent("android.intent.action.VIEW",
+                                                Uri.parse("https://play.google.com/store/apps/details?id=com.oil.vivek.oilmillcalc"));
+                                startActivity(viewIntent);
+                            }
+                        });
+                        builder.setNegativeButton("Skip", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                editor.putInt("skipRemaining",3);
+                                editor.commit();
+                                dialog.cancel();
+                                continueLaunch();
+                            }
+                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    } else {
+                        editor.putInt("skipRemaining", appdata.getInt("skipRemaining", 0) - 1);
+                        editor.commit();
+                        continueLaunch();
+                    }
+                } else {
                     continueLaunch();
                 }
             }
-            else
-            {
-                continueLaunch();
-            }
         }
-    }
 
     private void checkversion() {
         if (!AndyUtils.isNetworkAvailable(launcher_helper.this)) {
