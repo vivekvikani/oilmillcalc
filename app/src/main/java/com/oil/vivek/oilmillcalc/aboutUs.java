@@ -25,7 +25,9 @@ import com.oil.vivek.oilmillcalc.htmlparse.ParseContent;
 import com.oil.vivek.oilmillcalc.utils.AndyConstants;
 import com.oil.vivek.oilmillcalc.utils.AndyUtils;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 
@@ -59,12 +61,12 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
         SharedPreferences.Editor editor = appdata.edit();
 
         daysLeft = appdata.getInt("daysLeft", 0);
-        if(daysLeft==0)
+        if(daysLeft >= 0)
         {
             editor.putBoolean("FullVersionActive", false);
             editor.commit();
         }
-        else if(daysLeft== -1)
+        else if(daysLeft == -1)
         {
             editor.putBoolean("FullVersionActive", true);
             editor.commit();
@@ -138,6 +140,8 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
     }
 
     private void checkDaysLeftonServer() {
+        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+
         if (!AndyUtils.isNetworkAvailable(aboutUs.this)) {
             AndyUtils.showToast(
                     "Internet not available!",
@@ -153,6 +157,7 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
         map.put(AndyConstants.Params.VERSION, VersionNumber);
         map.put(AndyConstants.Params.DAYS_LEFT, String.valueOf(daysLeft));
         map.put(AndyConstants.Params.NOTIFICATION_TOKEN, appdata.getString("firebase_token", null));
+        map.put(AndyConstants.Params.LAST_ACCESS, currentDateTimeString);
 
         new HttpRequester(aboutUs.this, map,
                 AndyConstants.ServiceCode.LOGIN, this);

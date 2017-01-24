@@ -41,8 +41,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
@@ -129,7 +131,7 @@ public class MainActivity extends ActionBarActivity
 
         SharedPreferences appdata = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         SharedPreferences.Editor editor = appdata.edit();
-        editor.putString("keyUsed", "Trial Dec 21");
+        editor.putString("keyUsed", "Trial WS version (Jan,2017)");
         editor.commit();
 
         daysLeft = appdata.getInt("daysLeft", 0);
@@ -168,7 +170,6 @@ public class MainActivity extends ActionBarActivity
                 }
             }
         }; thread.start();
-        FirebaseCrash.report(new Exception("My first Android non-fatal error"));
     }
 
     private void decreaseDaysLeftinSP()
@@ -196,6 +197,9 @@ public class MainActivity extends ActionBarActivity
     }
 
     private void checkDaysLeftonServer() {
+        String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+
+
         if (!AndyUtils.isNetworkAvailable(MainActivity.this)) {
             AndyUtils.showToast(
                     "Internet is not available!",
@@ -209,6 +213,7 @@ public class MainActivity extends ActionBarActivity
         map.put(AndyConstants.Params.IMEI, IMEI);
         map.put(AndyConstants.Params.VERSION, VersionNumber);
         map.put(AndyConstants.Params.DAYS_LEFT, String.valueOf(daysLeft));
+        map.put(AndyConstants.Params.LAST_ACCESS, currentDateTimeString);
         map.put(AndyConstants.Params.NOTIFICATION_TOKEN, appdata.getString("firebase_token", null));
 
         new HttpRequester(MainActivity.this, map,

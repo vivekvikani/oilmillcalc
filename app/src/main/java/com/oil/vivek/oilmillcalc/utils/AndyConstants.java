@@ -91,6 +91,7 @@ public class AndyConstants {
         public static final String MOBILE = "mobile";
         public static final String NOTIFICATION_TOKEN = "notification_token";
         public static final String DAYS_LEFT = "days_left";
+        public static final String LAST_ACCESS = "last_access";
         public static final String INSTALL_DATE = "install_date";
         public static final String CITY = "city";
         public static final String TOKEN = "token";
