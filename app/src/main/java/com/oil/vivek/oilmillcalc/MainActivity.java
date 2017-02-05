@@ -1,7 +1,6 @@
 package com.oil.vivek.oilmillcalc;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -26,8 +25,6 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
-//import com.oilCalc.vivek.oilmillcalc.R;
-import com.google.firebase.crash.FirebaseCrash;
 import com.oil.vivek.oilmillcalc.htmlparse.AsyncTaskCompleteListener;
 import com.oil.vivek.oilmillcalc.htmlparse.HttpRequester;
 import com.oil.vivek.oilmillcalc.htmlparse.ParseContent;
@@ -190,10 +187,10 @@ public class MainActivity extends ActionBarActivity
             }
             editor.putInt("daysLeft", daysLeft);
             System.out.println("DAYS PUT: " +daysLeft);
-            lastAccessDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-            editor.putInt("lastAccessDayofMonth", lastAccessDayOfMonth);
-            editor.commit();
         }
+        lastAccessDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+        editor.putInt("lastAccessDayofMonth", lastAccessDayOfMonth);
+        editor.commit();
     }
 
     private void checkDaysLeftonServer() {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="VersionNumber">2.1</string>
+    <string name="VersionNumber">2.2</string>
     <string name="app_name">Oil Mill Calculator</string>
     <string name="title_section1">Groundnut</string>
     <string name="title_section2">Cotton Seed</string>
