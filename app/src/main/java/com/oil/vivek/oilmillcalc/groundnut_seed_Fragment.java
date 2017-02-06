@@ -80,7 +80,7 @@ public class groundnut_seed_Fragment extends Fragment {
                 case 0:
                     return "20 Kgs";
                 case 1:
-                    return "40 Kgs";
+                    return "400 Kgs";
             }
             return null;
         }

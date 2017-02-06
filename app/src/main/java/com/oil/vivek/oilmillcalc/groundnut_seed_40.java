@@ -354,7 +354,7 @@ public class groundnut_seed_40 extends Fragment implements View.OnClickListener,
                         break;
                     case R.id.e2:
                         Txt = e2.getText().toString().trim();
-                        Pattern = "\\d{0,2}(\\.\\d{0,2})?";
+                        Pattern = "\\d{0,3}(\\.\\d{0,2})?";
                         if (!Txt.matches(Pattern)) {
                             e2.setText(tempValue);
                             e2.setSelection(e2.getText().length());
@@ -362,7 +362,7 @@ public class groundnut_seed_40 extends Fragment implements View.OnClickListener,
                         break;
                     case R.id.f2:
                         Txt = f2.getText().toString().trim();
-                        Pattern = "\\d{0,2}(\\.\\d{0,2})?";
+                        Pattern = "\\d{0,3}(\\.\\d{0,2})?";
                         if (!Txt.matches(Pattern)) {
                             f2.setText(tempValue);
                             f2.setSelection(f2.getText().length());
