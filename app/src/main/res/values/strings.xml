@@ -8,6 +8,7 @@
     <string name="title_section3">Rapseed</string>
     <string name="title_section4">Castor</string>
     <string name="title_section5">Maize</string>
+    <string name="title_section6">Groundnut Seed</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -39,6 +40,7 @@
         <item>Rapseed</item>
         <item>Castor</item>
         <item>Maize</item>
+        <item>Groundnut Seed</item>
 
     </string-array>
 

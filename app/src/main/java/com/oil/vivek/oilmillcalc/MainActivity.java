@@ -2,6 +2,7 @@ package com.oil.vivek.oilmillcalc;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
@@ -9,6 +10,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -64,16 +67,16 @@ public class MainActivity extends ActionBarActivity
     public static final MediaType FORM_DATA_TYPE
             = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
     //URL derived from form URL
-    public static final String URL="https://docs.google.com/forms/d/1aruLUVLo79payPZQIwnPsdDaoqdCJqS9X5tWJ2n7C0Y/formResponse";
+    public static final String URL = "https://docs.google.com/forms/d/1aruLUVLo79payPZQIwnPsdDaoqdCJqS9X5tWJ2n7C0Y/formResponse";
     //input element ids found from the live form page
-    public static final String NAME_KEY="entry_155989187";
-    public static final String PHN_KEY="entry_1982580765";
-    public static final String KEY_KEY="entry_2058375361";
-    public static final String LOCATION_KEY="entry_851352356";
-    public static final String IMEI_KEY="entry_1909631967";
-    public static final String SIM_KEY="entry_652569562";
-    public static final String SIM_PROVIDER_KEY="entry_2133343088";
-    public static final String VERSION="entry_2089304934";
+    public static final String NAME_KEY = "entry_155989187";
+    public static final String PHN_KEY = "entry_1982580765";
+    public static final String KEY_KEY = "entry_2058375361";
+    public static final String LOCATION_KEY = "entry_851352356";
+    public static final String IMEI_KEY = "entry_1909631967";
+    public static final String SIM_KEY = "entry_652569562";
+    public static final String SIM_PROVIDER_KEY = "entry_2133343088";
+    public static final String VERSION = "entry_2089304934";
 
     public String VersionNumber;
 
@@ -89,9 +92,8 @@ public class MainActivity extends ActionBarActivity
     private LocationManager locationManager;
     private LocationListener locationListener;
     boolean network_enabled = false;
-    parse obj = new parse();
     private ParseContent parseContent;
-    private ArrayList<HashMap<String,String>> alldetails;
+    private ArrayList<HashMap<String, String>> alldetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +115,7 @@ public class MainActivity extends ActionBarActivity
         try {
             ViewConfiguration config = ViewConfiguration.get(this);
             Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
-            if(menuKeyField != null) {
+            if (menuKeyField != null) {
                 menuKeyField.setAccessible(true);
                 menuKeyField.setBoolean(config, false);
             }
@@ -132,18 +134,15 @@ public class MainActivity extends ActionBarActivity
         editor.commit();
 
         daysLeft = appdata.getInt("daysLeft", 0);
-        if(daysLeft == 0)
+        if (daysLeft == 0)
             isExpired = true;
-        else if(daysLeft != 0)
+        else if (daysLeft != 0)
             isExpired = false;
-        if(isExpired)
-        {
+        if (isExpired) {
             editor.putBoolean("trialExpired", true);
             editor.putBoolean("FullVersionActive", false);
             editor.commit();
-        }
-        else
-        {
+        } else {
             editor.putBoolean("trialExpired", false);
             editor.commit();
         }
@@ -159,34 +158,31 @@ public class MainActivity extends ActionBarActivity
                     while (bool[0]) {
                         bool[0] = false;
                         checkDaysLeftonServer();
-                        /*obj.queryParseIMEIinBG(MainActivity.this, IMEI, VersionNumber)*/;
                     }
-                }catch (Exception e)
-                {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-        }; thread.start();
+        };
+        thread.start();
     }
 
-    private void decreaseDaysLeftinSP()
-    {
+    private void decreaseDaysLeftinSP() {
         System.out.println("DECREASE DAYS");
         SharedPreferences appdata = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         SharedPreferences.Editor editor = appdata.edit();
         Calendar calendar = new GregorianCalendar();
         int todayDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         int lastAccessDayOfMonth = appdata.getInt("lastAccessDayofMonth", 0);
-        System.out.println("Last Access Day: "  +lastAccessDayOfMonth);
-        if(todayDayOfMonth != lastAccessDayOfMonth && lastAccessDayOfMonth != 0)
-        {
+        System.out.println("Last Access Day: " + lastAccessDayOfMonth);
+        if (todayDayOfMonth != lastAccessDayOfMonth && lastAccessDayOfMonth != 0) {
             daysLeft = appdata.getInt("daysLeft", 0);
-            System.out.println("DAYS LEFT :" +daysLeft);
-            if(daysLeft>0){
+            System.out.println("DAYS LEFT :" + daysLeft);
+            if (daysLeft > 0) {
                 daysLeft = daysLeft - 1;
             }
             editor.putInt("daysLeft", daysLeft);
-            System.out.println("DAYS PUT: " +daysLeft);
+            System.out.println("DAYS PUT: " + daysLeft);
         }
         lastAccessDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         editor.putInt("lastAccessDayofMonth", lastAccessDayOfMonth);
@@ -216,6 +212,7 @@ public class MainActivity extends ActionBarActivity
         new HttpRequester(MainActivity.this, map,
                 AndyConstants.ServiceCode.LOGIN, this);
     }
+
     @Override
     public void onTaskCompleted(String response, int serviceCode) {
         Log.d("responsejson", response.toString());
@@ -231,7 +228,7 @@ public class MainActivity extends ActionBarActivity
                     System.out.println("DAYS LEFT HTTP SERVER: " + alldetails.get(0).get(AndyConstants.Params.DAYS_LEFT));
                     editor.putInt("daysLeft", Integer.parseInt(alldetails.get(0).get(AndyConstants.Params.DAYS_LEFT)));
                     editor.commit();
-                }else {
+                } else {
                     String msg = parseContent.getErrorCode(response);
                     AndyUtils.showToast(
                             msg,
@@ -251,13 +248,14 @@ public class MainActivity extends ActionBarActivity
         SharedPreferences appdata = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         userRegistered = appdata.getInt("userRegistered", 0);
 
-        if (userRegistered == 0)
-        {
-            locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        if (userRegistered == 0) {
+            /*
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+                network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            }
 
-            if(network_enabled)
-            {
+            if (network_enabled) {
                 locationListener = new LocationListener() {
                     public void onLocationChanged(Location location) {
                         //             Log.d("loc", "Inside LocationChanged");
@@ -270,6 +268,7 @@ public class MainActivity extends ActionBarActivity
                         PostDataTask postDataTask = new PostDataTask();
                         postDataTask.execute(URL, name, number, key, locationString, IMEI, simID, operatorName, VersionNumber);
                         Log.d("loc", "POST CALLED");
+
                         locationManager.removeUpdates(locationListener);
                     }
 
@@ -287,6 +286,7 @@ public class MainActivity extends ActionBarActivity
             }
             else
             {
+            */
                 String name = appdata.getString("userName", "");
                 String number = appdata.getString("phnNumber", "");
                 String key = appdata.getString("keyUsed", "");
@@ -294,7 +294,6 @@ public class MainActivity extends ActionBarActivity
                 PostDataTask postDataTask = new PostDataTask();
                 postDataTask.execute(URL, name, number, key, "Location Disabled", IMEI, simID, operatorName, VersionNumber);
                 Log.d("loc", "POST CALLED WITHOUT LOCATION");
-            }
         }
 
         daysLeft = appdata.getInt("daysLeft", 0);
@@ -420,6 +419,11 @@ public class MainActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_section5);
                 actionBar.setTitle(mTitle);
                 break;
+            case 5:
+                objFragment = new groundnut_seed_Fragment();
+                mTitle = getString(R.string.title_section6);
+                actionBar.setTitle(mTitle);
+                break;
         }
 
         // update the main content by replacing fragments
@@ -446,6 +450,9 @@ public class MainActivity extends ActionBarActivity
             case 5:
                 mTitle = getString(R.string.title_section5);
                 break;
+            case 6:
+                mTitle = getString(R.string.title_section6);
+                break;
         }
     }
 
@@ -460,9 +467,6 @@ public class MainActivity extends ActionBarActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
             return true;
@@ -472,16 +476,6 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            return true;
-        }*/
-
         return super.onOptionsItemSelected(item);
     }
 

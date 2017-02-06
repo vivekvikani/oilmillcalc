@@ -1,9 +1,13 @@
 package com.oil.vivek.oilmillcalc;
 
+import android.*;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,6 +15,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -33,6 +39,7 @@ import java.util.HashMap;
  * Created by Hitu on 17/07/2015.
  */
 public class authentication extends ActionBarActivity implements View.OnClickListener, AsyncTaskCompleteListener{
+    private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 1;
     public String IMEI;
     public String VersionNumber;
     public String operatorName;
@@ -42,6 +49,7 @@ public class authentication extends ActionBarActivity implements View.OnClickLis
     int daysLeft = 3;
     Button finalEnter;
     ProgressDialog progress;
+    TelephonyManager telephonyManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,25 +61,9 @@ public class authentication extends ActionBarActivity implements View.OnClickLis
         progress.setCancelable(false);
         progress.show();
 
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         operatorName = telephonyManager.getNetworkOperatorName();
-        IMEI = telephonyManager.getDeviceId();
-        simID = telephonyManager.getSimSerialNumber();
-
-        setContentView(R.layout.activity_authentication);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.ic_launcher);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.argb(255, 0, 121, 107)));
-        EditText name = (EditText) findViewById(R.id.name);
-        name.requestFocus();
-
-        finalEnter = (Button) findViewById(R.id.finalEnter);
-        finalEnter.setOnClickListener(this);
-
-        parseContent = new ParseContent(this);
-
-        checkIMEI();
+        checkPermission();
     }
 
     @Override
@@ -237,5 +229,68 @@ public class authentication extends ActionBarActivity implements View.OnClickLis
             default:
                 break;
         }
+    }
+
+
+    private void checkPermission() {
+        if (ContextCompat.checkSelfPermission(this,
+                android.Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.READ_PHONE_STATE},
+                    MY_PERMISSIONS_REQUEST_READ_PHONE_STATE);
+        }else
+        {
+            continueLaunch();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_PHONE_STATE: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    continueLaunch();
+
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(authentication.this);
+                    builder.setCancelable(false);
+                    builder.setTitle("Permission Required");
+                    builder.setMessage("This permission is required to continue using the app.");
+                    builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            checkPermission();
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+            }
+        }
+    }
+
+    public void continueLaunch(){
+        IMEI = telephonyManager.getDeviceId();
+        simID = telephonyManager.getSimSerialNumber();
+
+        setContentView(R.layout.activity_authentication);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_launcher);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.argb(255, 0, 121, 107)));
+        EditText name = (EditText) findViewById(R.id.name);
+        name.requestFocus();
+
+        finalEnter = (Button) findViewById(R.id.finalEnter);
+        finalEnter.setOnClickListener(this);
+
+        parseContent = new ParseContent(this);
+
+        checkIMEI();
     }
 }
