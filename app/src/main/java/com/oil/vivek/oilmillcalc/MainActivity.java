@@ -130,7 +130,7 @@ public class MainActivity extends ActionBarActivity
 
         SharedPreferences appdata = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         SharedPreferences.Editor editor = appdata.edit();
-        editor.putString("keyUsed", "Trial WS version (Jan,2017)");
+        editor.putString("keyUsed", "Trial WS version (Feb,2017)");
         editor.commit();
 
         daysLeft = appdata.getInt("daysLeft", 0);
