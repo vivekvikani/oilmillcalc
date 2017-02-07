@@ -13,6 +13,8 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.TelephonyManager;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -53,6 +55,12 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
         setContentView(R.layout.activity_about_us);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.argb(255, 0, 121, 107)));
+
+        TextView privacypolicy = (TextView) findViewById(R.id.privacypolicyTV);
+        privacypolicy.setText(
+                Html.fromHtml(
+                        "<a href=\"http://oilmill.madeovercode.com/privacypolicy\">Privacy Policy</a> "));
+        privacypolicy.setMovementMethod(LinkMovementMethod.getInstance());
 
         final_activate = (Button) findViewById(R.id.final_activate);
         final_activate.setOnClickListener(this);
