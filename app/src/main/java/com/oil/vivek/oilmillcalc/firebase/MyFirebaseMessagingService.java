@@ -9,12 +9,11 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.oil.vivek.oilmillcalc.MainActivity;
 import com.oil.vivek.oilmillcalc.R;
+import com.oil.vivek.oilmillcalc.notification_screen;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -31,30 +30,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String imageUri;
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-            //imageUri will contain URL of the image to be displayed with Notification
             imageUri = remoteMessage.getData().get("image");
             bitmap = getBitmapfromUrl(imageUri);
         }
 
-        String title = null;
         if (remoteMessage.getNotification() != null) {
-             title = remoteMessage.getNotification().getTitle();
-            Log.d(TAG, "Message Time: " + remoteMessage.getSentTime());
-        }
-
-        if (remoteMessage.getNotification() != null) {
+             String title = remoteMessage.getNotification().getTitle();
             if(title != null)
-                createNotification(remoteMessage.getNotification().getBody(),title,bitmap);
+                createNotification(remoteMessage.getNotification().getBody(), title, bitmap, remoteMessage.getSentTime());
             else
-                createNotification(remoteMessage.getNotification().getBody(),"Oil Mill Calculator",bitmap);
+                createNotification(remoteMessage.getNotification().getBody(), getString(R.string.app_name), bitmap, remoteMessage.getSentTime());
         }
     }
-    // [END receive_message]
 
-    private void createNotification( String messageBody, String title, Bitmap image) {
-        Intent intent = new Intent( this , MainActivity.class );
+    private void createNotification( String messageBody, String title, Bitmap image, long time) {
+        Intent intent = new Intent( this , notification_screen.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("title", title);
+        intent.putExtra("body", messageBody);
+        if(image!=null)
+            intent.putExtra("image", image);
+        else
+            intent.putExtra("image", "");
+        intent.putExtra("time", time);
         PendingIntent resultIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 

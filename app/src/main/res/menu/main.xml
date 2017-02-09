@@ -2,9 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/aboutUsAction" android:title="@string/action_example"
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/notificationAction" android:icon="@drawable/whatsapp48" android:title="@string/action_example"
         app:showAsAction="always" />
-<!--
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" android:showAsAction="never" />
--->
 </menu>
