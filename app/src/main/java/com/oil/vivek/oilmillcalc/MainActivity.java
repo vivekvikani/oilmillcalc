@@ -477,9 +477,9 @@ public class MainActivity extends ActionBarActivity
             case R.id.aboutUsAction:
                 startActivity(new Intent(this, aboutUs.class));
                 return true;
-            case R.id.notificationAction:
+            /*case R.id.notificationAction:
                 startActivity(new Intent(this, notification_screen.class));
-                return true;
+                return true;*/
             default:
                 return super.onOptionsItemSelected(item);
         }

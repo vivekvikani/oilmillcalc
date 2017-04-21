@@ -3,6 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/aboutUsAction" android:title="@string/action_example"
         app:showAsAction="ifRoom" />
-    <item android:id="@+id/notificationAction" android:icon="@drawable/whatsapp48" android:title="@string/action_example"
-        app:showAsAction="always" />
+    <!--<item android:id="@+id/notificationAction" android:icon="@drawable/whatsapp48" android:title="@string/action_example"
+        app:showAsAction="always" />-->
 </menu>
