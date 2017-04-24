@@ -3,6 +3,8 @@ package com.oil.vivek.oilmillcalc.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 /**
@@ -32,6 +34,23 @@ public class AndyUtils {
     public static void showToast(String msg, Context ctx) {
 
         Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    public static WebView loadWebView(String URL, Context ctx)
+    {
+        WebView mWebview  = new WebView(ctx);
+
+        mWebview.getSettings().setJavaScriptEnabled(true); // enable javascript
+
+        mWebview.setWebViewClient(new WebViewClient() {
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+
+            }
+        });
+
+        mWebview .loadUrl(URL);
+        return mWebview;
+
     }
 
 }

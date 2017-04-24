@@ -17,6 +17,7 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +42,7 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
     TextView internetTxt;
     TextView detailsTxt;
 
-    Button final_activate;
+    Button final_activate,pay_online;
     Boolean FullVersionActive;
     SharedPreferences appdata;
     int daysLeft;
@@ -63,10 +64,16 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
         privacypolicy.setMovementMethod(LinkMovementMethod.getInstance());
 
         final_activate = (Button) findViewById(R.id.final_activate);
+        pay_online = (Button) findViewById(R.id.pay_online);
+
         final_activate.setOnClickListener(this);
+        pay_online.setOnClickListener(this);
 
         appdata = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = appdata.edit();
+
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        IMEI = telephonyManager.getDeviceId();
 
         daysLeft = appdata.getInt("daysLeft", 0);
         if(daysLeft >= 0)
@@ -114,37 +121,70 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
 
     @Override
     public void onClick(View v) {
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        IMEI = telephonyManager.getDeviceId();
-        VersionNumber = getString(R.string.VersionNumber);
-
         parseContent = new ParseContent(this);
 
+        switch (v.getId()){
+            case R.id.pay_online:
+                launchInstamojoRequest();
+                break;
+            case R.id.final_activate:
+
+                VersionNumber = getString(R.string.VersionNumber);
+
+                progress = new ProgressDialog(this);
+                progress.setTitle("Activating Full Version");
+                progress.setMessage("Wait while contacting server...");
+                progress.setCancelable(false);
+                progress.show();
+
+                final boolean[] bool = {true};
+                final Handler handler = new Handler();
+                final Thread thread = new Thread() {
+                    @Override
+
+                    public void run() {
+                        try {
+                            while(bool[0]) {
+                                Looper.prepare();
+                                handler.post(this);
+                                bool[0] = false;
+                                checkDaysLeftonServer();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                thread.start();
+                break;
+        }
+    }
+
+    private void launchInstamojoRequest()
+    {
         progress = new ProgressDialog(this);
-        progress.setTitle("Activating Full Version");
-        progress.setMessage("Wait while contacting server...");
+        progress.setTitle("Loading payment options");
+        progress.setMessage("Please wait...");
         progress.setCancelable(false);
         progress.show();
 
-        final boolean[] bool = {true};
-        final Handler handler = new Handler();
-        final Thread thread = new Thread() {
-            @Override
+        if (!AndyUtils.isNetworkAvailable(aboutUs.this)) {
+            AndyUtils.showToast(
+                    "Internet not available!",
+                    aboutUs.this);
+            progress.dismiss();
+            return;
+        }
 
-            public void run() {
-                try {
-                    while(bool[0]) {
-                        Looper.prepare();
-                        handler.post(this);
-                        bool[0] = false;
-                        checkDaysLeftonServer();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        thread.start();
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put(AndyConstants.URL, AndyConstants.ServiceType.INSTAMOJOCREATE);
+
+        map.put(AndyConstants.Params.NAME, appdata.getString("userName", null));
+        map.put(AndyConstants.Params.MOBILE, appdata.getString("phnNumber", null));
+        map.put(AndyConstants.Params.IMEI, IMEI);
+
+        new HttpRequester(aboutUs.this, map,
+                AndyConstants.ServiceCode.INSTAMOJOCREATE, this);
     }
 
     private void checkDaysLeftonServer() {
@@ -174,7 +214,6 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
     public void onTaskCompleted(String response, int serviceCode) {
         switch (serviceCode) {
             case AndyConstants.ServiceCode.LOGIN:
-
                 if (parseContent.isSuccess(response)) {
                     alldetails = parseContent.getDetaillogin(response);
                     if(Integer.parseInt(alldetails.get(0).get(AndyConstants.Params.DAYS_LEFT)) == -1)
@@ -200,6 +239,21 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
                 }
 
                 break;
+
+            case AndyConstants.ServiceCode.INSTAMOJOCREATE:
+                    String paymentURL = parseContent.getPaymentURL(response);
+                    if(paymentURL != null){
+                        WebView webView = AndyUtils.loadWebView(paymentURL, this);
+                        setContentView(webView);
+                    }else{
+                        AndyUtils.showToast(
+                                "Sorry, something went wrong!",
+                                aboutUs.this);
+                        Log.e("Payment","IMEI not found | Parameter missing");
+                    }
+                    progress.dismiss();
+                break;
+
             default:
                 break;
         }

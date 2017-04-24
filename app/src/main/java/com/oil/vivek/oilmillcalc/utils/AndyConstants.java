@@ -19,6 +19,7 @@ public class AndyConstants {
         public static final int LOGIN = 2;
         public static final int CHECKVERSION = 3;
         public static final int CHECKIMEI = 4;
+        public static final int INSTAMOJOCREATE = 5;
 
     }
 
@@ -30,6 +31,7 @@ public class AndyConstants {
         public static final String REGISTERATION = BASE_URL + "register.php";
         public static final String CHECKVERSION = BASE_URL + "checkversion.php";
         public static final String CHECKIMEI = BASE_URL + "checkIMEI.php";
+        public static final String INSTAMOJOCREATE = BASE_URL + "instamojo_create_request.php";
 
     }
     // webservice key constants
@@ -49,6 +51,8 @@ public class AndyConstants {
         public static final String VERSIONDB = "versionDB";
         public static final String ISCOMPLUSORY = "isCompulsory";
         public static final String ISACTIVE = "isActive";
+        public static final String PAYMENTREQUESTURL = "longurl";
+        public static final String INSTAMOJOPAYMENTID = "instamojo_payment_id";
         }
 }
 

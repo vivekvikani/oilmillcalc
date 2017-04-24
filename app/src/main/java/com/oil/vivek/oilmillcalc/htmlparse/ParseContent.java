@@ -171,4 +171,20 @@ public class ParseContent {
         }
         return arraylist;
     }
+
+    public String getPaymentURL(String response){
+        String url = null;
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            if (!jsonObject.getString(KEY_SUCCESS).equals("0")) {
+                JSONObject jsonArray = jsonObject.getJSONObject("payment_request");
+                url = jsonArray.getString(AndyConstants.Params.PAYMENTREQUESTURL);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        System.out.println("PAYMENT URL: "+url);
+        return url;
+    }
+
 }

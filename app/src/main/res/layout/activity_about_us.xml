@@ -87,16 +87,29 @@
         android:layout_marginTop="7dp" />
 
     <Button
+        android:id="@+id/pay_online"
         style="@style/Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Activate"
-        android:id="@+id/final_activate"
         android:layout_gravity="right"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/button_active"
+        android:text="Pay Online"
+        android:layout_above="@+id/AppName"
+        android:layout_alignLeft="@+id/final_activate"
+        android:layout_alignStart="@+id/final_activate" />
+
+    <Button
+        android:id="@+id/final_activate"
+        style="@style/Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/textView6"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp" />
+        android:layout_gravity="right"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/button_active"
+        android:text="Activate" />
 
     <TextView
         android:layout_width="wrap_content"
