@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -18,7 +20,9 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,16 +43,16 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
     public String IMEI;
     public String VersionNumber;
     TextView trial;
-    TextView internetTxt;
-    TextView detailsTxt;
 
-    Button final_activate,pay_online;
+
+    Button pay_online;
     Boolean FullVersionActive;
     SharedPreferences appdata;
     int daysLeft;
     ProgressDialog progress;
     private ParseContent parseContent;
     private ArrayList<HashMap<String,String>> alldetails;
+    LinearLayout pay_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +67,7 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
                         "<a href=\"http://oilmill.madeovercode.com/privacypolicy\">Privacy Policy</a> "));
         privacypolicy.setMovementMethod(LinkMovementMethod.getInstance());
 
-        final_activate = (Button) findViewById(R.id.final_activate);
         pay_online = (Button) findViewById(R.id.pay_online);
-
-        final_activate.setOnClickListener(this);
         pay_online.setOnClickListener(this);
 
         appdata = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -89,27 +90,20 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
 
         FullVersionActive = appdata.getBoolean("FullVersionActive", false);
         trial = (TextView) findViewById(R.id.trialDays);
-        internetTxt = (TextView) findViewById(R.id.textView6);
-        detailsTxt = (TextView) findViewById(R.id.textView5);
+        pay_view = (LinearLayout) findViewById(R.id.pay_view);
+
         if(FullVersionActive)
         {
             trial.setText("FULL VERSION");
             trial.setTextColor(Color.parseColor("#ff008174"));
-            final_activate.setEnabled(false);
-
-            final_activate.setVisibility(View.GONE);
-            internetTxt.setVisibility(View.GONE);
-            detailsTxt.setVisibility(View.GONE);
+            pay_view.setVisibility(View.GONE);
 
         }
         else
         {
             trial.setText("Trial Version");
             trial.setTextColor(Color.parseColor("#ffc00200"));
-            final_activate.setEnabled(true);
-            final_activate.setVisibility(View.VISIBLE);
-            internetTxt.setVisibility(View.VISIBLE);
-            detailsTxt.setVisibility(View.VISIBLE);
+            pay_view.setVisibility(View.VISIBLE);
         }
     }
 
@@ -127,36 +121,6 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
             case R.id.pay_online:
                 launchInstamojoRequest();
                 break;
-            case R.id.final_activate:
-
-                VersionNumber = getString(R.string.VersionNumber);
-
-                progress = new ProgressDialog(this);
-                progress.setTitle("Activating Full Version");
-                progress.setMessage("Wait while contacting server...");
-                progress.setCancelable(false);
-                progress.show();
-
-                final boolean[] bool = {true};
-                final Handler handler = new Handler();
-                final Thread thread = new Thread() {
-                    @Override
-
-                    public void run() {
-                        try {
-                            while(bool[0]) {
-                                Looper.prepare();
-                                handler.post(this);
-                                bool[0] = false;
-                                checkDaysLeftonServer();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                };
-                thread.start();
-                break;
         }
     }
 
@@ -166,6 +130,7 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
         progress.setTitle("Loading payment options");
         progress.setMessage("Please wait...");
         progress.setCancelable(false);
+        progress.setIndeterminate(true);
         progress.show();
 
         if (!AndyUtils.isNetworkAvailable(aboutUs.this)) {
@@ -210,6 +175,7 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
         new HttpRequester(aboutUs.this, map,
                 AndyConstants.ServiceCode.LOGIN, this);
     }
+
     @Override
     public void onTaskCompleted(String response, int serviceCode) {
         switch (serviceCode) {
@@ -243,8 +209,11 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
             case AndyConstants.ServiceCode.INSTAMOJOCREATE:
                     String paymentURL = parseContent.getPaymentURL(response);
                     if(paymentURL != null){
-                        WebView webView = AndyUtils.loadWebView(paymentURL, this);
+                        AndyUtils.showToastLong("Loading Payment Methods, Please Wait....", aboutUs.this);
+                        WebView webView = loadWebView(paymentURL, this);
                         setContentView(webView);
+                        if(webView.getUrl().equals(AndyConstants.ServiceType.SUCCESS_URL))
+                            setContentView(R.layout.activity_about_us);
                     }else{
                         AndyUtils.showToast(
                                 "Sorry, something went wrong!",
@@ -270,7 +239,7 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
 
                 trial.setText("FULL VERSION");
                 trial.setTextColor(Color.parseColor("#ff008174"));
-                final_activate.setEnabled(false);
+                pay_view.setVisibility(View.GONE);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(aboutUs.this);
                 builder.setCancelable(false);
@@ -287,5 +256,63 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
                 alert.show();
             }
         });
+    }
+
+    public WebView loadWebView(final String URL, final Context ctx)
+    {
+        WebView mWebview  = new WebView(ctx);
+
+        if (Build.VERSION.SDK_INT >= 19) {
+            mWebview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        }
+        else {
+            mWebview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }
+
+        mWebview.getSettings().setJavaScriptEnabled(true); // enable javascript
+        mWebview.setWebViewClient(new WebViewClient() {
+            public boolean shouldOverrideUrlLoading(WebView view, String url){
+                return handleUri(ctx, url);
+            }
+        });
+
+        mWebview.loadUrl(URL);
+        return mWebview;
+    }
+
+    private boolean handleUri(Context context, String url) {
+        System.out.println("Logging URL: " +url);
+        if (url.contains(AndyConstants.ServiceType.SUCCESS_URL)) {
+            setContentView(R.layout.activity_about_us);
+            progress = new ProgressDialog(context);
+            progress.setTitle("Activating Full Version");
+            progress.setMessage("Wait while contacting server...");
+            progress.setCancelable(false);
+            progress.show();
+
+            final boolean[] bool = {true};
+            final Handler handler = new Handler();
+            final Thread thread = new Thread() {
+                @Override
+
+                public void run() {
+                    try {
+                        while(bool[0]) {
+                            Looper.prepare();
+                            handler.post(this);
+                            bool[0] = false;
+                            checkDaysLeftonServer();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            thread.start();
+            return true;
+        } else {
+            // Returning false means that you are going to load this url in the webView itself, not handled by default action
+            return false;
+        }
     }
 }

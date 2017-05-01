@@ -36,7 +36,7 @@ import java.util.HashMap;
 
 
 /**
- * Created by Hitu on 17/07/2015.
+ * Created by Vivek on 17/07/2015.
  */
 public class authentication extends ActionBarActivity implements View.OnClickListener, AsyncTaskCompleteListener{
     private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 1;
@@ -165,7 +165,7 @@ public class authentication extends ActionBarActivity implements View.OnClickLis
 
     @Override
     public void onTaskCompleted(String response, int serviceCode) {
-        Log.d("responsejson", response.toString());
+        //Log.d("responsejson", response.toString());
         switch (serviceCode) {
             case AndyConstants.ServiceCode.REGISTER:
 

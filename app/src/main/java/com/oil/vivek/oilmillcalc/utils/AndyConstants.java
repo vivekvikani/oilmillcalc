@@ -31,8 +31,8 @@ public class AndyConstants {
         public static final String REGISTERATION = BASE_URL + "register.php";
         public static final String CHECKVERSION = BASE_URL + "checkversion.php";
         public static final String CHECKIMEI = BASE_URL + "checkIMEI.php";
-        public static final String INSTAMOJOCREATE = BASE_URL + "instamojo_create_request.php";
-
+        public static final String INSTAMOJOCREATE = "http://madeovercode.com/calc_common/instamojo_create_request.php";
+        public static final String SUCCESS_URL = "http://www.madeovercode.com/calc_common/instamojo_redirect_success.html";
     }
     // webservice key constants
     public class Params {
