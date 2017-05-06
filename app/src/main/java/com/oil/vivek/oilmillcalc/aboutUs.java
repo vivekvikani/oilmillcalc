@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.oil.vivek.oilmillcalc.htmlparse.AsyncTaskCompleteListener;
 import com.oil.vivek.oilmillcalc.htmlparse.HttpRequester;
 import com.oil.vivek.oilmillcalc.htmlparse.ParseContent;
@@ -155,6 +156,7 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
     private void checkDaysLeftonServer() {
         String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
+        VersionNumber = getString(R.string.VersionNumber);
         if (!AndyUtils.isNetworkAvailable(aboutUs.this)) {
             AndyUtils.showToast(
                     "Internet not available!",
@@ -212,8 +214,6 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
                         AndyUtils.showToastLong("Loading Payment Methods, Please Wait....", aboutUs.this);
                         WebView webView = loadWebView(paymentURL, this);
                         setContentView(webView);
-                        if(webView.getUrl().equals(AndyConstants.ServiceType.SUCCESS_URL))
-                            setContentView(R.layout.activity_about_us);
                     }else{
                         AndyUtils.showToast(
                                 "Sorry, something went wrong!",
@@ -264,14 +264,15 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
 
         if (Build.VERSION.SDK_INT >= 19) {
             mWebview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        }
-        else {
+        }else
+        {
             mWebview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         }
 
         mWebview.getSettings().setJavaScriptEnabled(true); // enable javascript
         mWebview.setWebViewClient(new WebViewClient() {
             public boolean shouldOverrideUrlLoading(WebView view, String url){
+                System.out.println("Override ");
                 return handleUri(ctx, url);
             }
         });
@@ -282,11 +283,14 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
 
     private boolean handleUri(Context context, String url) {
         System.out.println("Logging URL: " +url);
+
         if (url.contains(AndyConstants.ServiceType.SUCCESS_URL)) {
+
             setContentView(R.layout.activity_about_us);
+
             progress = new ProgressDialog(context);
             progress.setTitle("Activating Full Version");
-            progress.setMessage("Wait while contacting server...");
+            progress.setMessage("Wait while contacting server....");
             progress.setCancelable(false);
             progress.show();
 

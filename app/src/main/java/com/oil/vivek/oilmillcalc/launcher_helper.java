@@ -31,7 +31,7 @@ public class launcher_helper extends ActionBarActivity implements AsyncTaskCompl
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(isGooglePlayServicesAvailable(this)){
+        if(true){
             parseContent = new ParseContent(this);
             appdata = PreferenceManager.getDefaultSharedPreferences(this);
             nameNumberEntered = appdata.getBoolean("nameNumberEntered",false);

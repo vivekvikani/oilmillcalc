@@ -15,18 +15,43 @@
       },
       "oauth_client": [
         {
+          "client_id": "587461399288-753n3ch4273qv0568n4hdl0rl0ak07lh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oil.vivek.oilmillcalc",
+            "certificate_hash": "9159d2b578c64b508835a81a209e58d52c410790"
+          }
+        },
+        {
+          "client_id": "587461399288-4frajvhelfja7tuk4d217utgnprph9b5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.oil.vivek.oilmillcalc",
+            "certificate_hash": "8d9c7a782ebc80fc1086a1b0f96f3aaab86c0fb2"
+          }
+        },
+        {
           "client_id": "587461399288-gq48vlqjt5cvci157bjmblccged62vn3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
-      "api_key": [{ "current_key": "" }],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbtQG018ecPC034wtJnpf833V8zU4jGyI"
+        }
+      ],
       "services": {
         "analytics_service": {
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "587461399288-gq48vlqjt5cvci157bjmblccged62vn3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

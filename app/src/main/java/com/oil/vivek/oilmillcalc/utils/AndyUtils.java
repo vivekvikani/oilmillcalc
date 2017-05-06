@@ -43,39 +43,6 @@ public class AndyUtils {
         Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
     }
 
-    public static WebView loadWebView(final String URL, final Context ctx)
-    {
-        WebView mWebview  = new WebView(ctx);
-
-        if (Build.VERSION.SDK_INT >= 19) {
-            mWebview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-        }
-        else {
-            mWebview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        }
-
-        mWebview.getSettings().setJavaScriptEnabled(true); // enable javascript
-        mWebview.setWebViewClient(new WebViewClient() {
-            public boolean shouldOverrideUrlLoading(WebView view, String url){
-                return handleUri(ctx, url);
-            }
-        });
-
-        mWebview.loadUrl(URL);
-        return mWebview;
-    }
-
-    private static boolean handleUri(Context context, String url) {
-        if (AndyConstants.ServiceType.SUCCESS_URL.equals(url)) {
-            System.out.println("Success URL");
-            Intent intent = new Intent(context,aboutUs.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-            return true;
-        } else {
-            // Returning false means that you are going to load this url in the webView itself, not handled by default action
-            return false;
-        }
-    }
 }
 
 
