@@ -1,6 +1,5 @@
 package com.oil.vivek.oilmillcalc;
 
-import android.*;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -46,7 +45,6 @@ public class authentication extends ActionBarActivity implements View.OnClickLis
     public String simID;
     private ParseContent parseContent;
     private ArrayList<HashMap<String,String>> alldetails;
-    int daysLeft = 3;
     Button finalEnter;
     ProgressDialog progress;
     TelephonyManager telephonyManager;
@@ -154,7 +152,7 @@ public class authentication extends ActionBarActivity implements View.OnClickLis
 
             map.put(AndyConstants.Params.IMEI, IMEI);
             map.put(AndyConstants.Params.VERSION, VersionNumber);
-            map.put(AndyConstants.Params.DAYS_LEFT, String.valueOf(daysLeft));
+            map.put(AndyConstants.Params.DAYS_LEFT, getString(R.string.days_left));
             map.put(AndyConstants.Params.NAME, name);
             map.put(AndyConstants.Params.MOBILE, number);
             map.put(AndyConstants.Params.CITY, "Location Disabled");
@@ -194,7 +192,7 @@ public class authentication extends ActionBarActivity implements View.OnClickLis
                     AndyUtils.showToast(
                             msg,
                             authentication.this);
-                    Log.d("msg", msg);
+                    progress.dismiss();
                 }
                 break;
 

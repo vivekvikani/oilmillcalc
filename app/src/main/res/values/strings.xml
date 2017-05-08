@@ -3,6 +3,7 @@
 
     <string name="VersionNumber">2.3</string>
     <string name="app_name">RP Oil Mill Calculator</string>
+    <string name="days_left">3</string>
     <string name="privacypolicy">.<a href='http://www.oilmillcalculator.madeovercode.com/privacypolicy'>Privacy Policy</a></string>
     <string name="title_section1">Groundnut</string>
     <string name="title_section2">Cotton Seed</string>

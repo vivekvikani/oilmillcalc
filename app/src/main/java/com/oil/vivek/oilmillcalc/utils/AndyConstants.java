@@ -1,17 +1,7 @@
 package com.oil.vivek.oilmillcalc.utils;
 
-import android.net.Uri;
-
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-/**
- * Created by Parsania Hardik on 19/01/2016.
- */
 public class AndyConstants {
     public static final String URL = "url";
-
 
 
     public class ServiceCode {
