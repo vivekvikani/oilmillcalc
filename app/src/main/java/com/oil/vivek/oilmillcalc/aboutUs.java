@@ -74,8 +74,7 @@ public class aboutUs extends ActionBarActivity implements View.OnClickListener, 
         appdata = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = appdata.edit();
 
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        IMEI = telephonyManager.getDeviceId();
+        IMEI = appdata.getString("imei","0");
 
         daysLeft = appdata.getInt("daysLeft", 0);
         if(daysLeft >= 0)

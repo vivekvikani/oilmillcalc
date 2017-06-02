@@ -79,7 +79,7 @@ public class rapseed_forward extends Fragment implements View.OnClickListener, T
                 s.setEnabled(false);
 
                 shareScreenShot obj = new shareScreenShot();
-                obj.shareScreenShotM(getView().findViewById(R.id.scrollView), (ScrollView) getView().findViewById(R.id.scrollView));
+                obj.shareScreenShotM(getView().findViewById(R.id.scrollView), (ScrollView) getView().findViewById(R.id.scrollView), getActivity());
                 startActivity(obj.shareIntent);
 
                 a2.requestFocus();

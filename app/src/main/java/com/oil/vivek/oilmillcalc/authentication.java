@@ -1,5 +1,7 @@
 package com.oil.vivek.oilmillcalc;
 
+import android.*;
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,16 +11,19 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,6 +44,8 @@ import java.util.HashMap;
  */
 public class authentication extends ActionBarActivity implements View.OnClickListener, AsyncTaskCompleteListener{
     private static final int MY_PERMISSIONS_REQUEST_READ_PHONE_STATE = 1;
+    private static final int MY_PERMISSIONS_REQUEST_READ_WRITE = 2;
+    private static final int REQUEST_PERMISSION_SETTING = 3;
     public String IMEI;
     public String VersionNumber;
     public String operatorName;
@@ -145,7 +152,6 @@ public class authentication extends ActionBarActivity implements View.OnClickLis
                     "Internet is not available!",
                     authentication.this);
             progress.dismiss();
-            return;
         }else{
             HashMap<String, String> map = new HashMap<String, String>();
             map.put(AndyConstants.URL, AndyConstants.ServiceType.REGISTERATION);
@@ -179,6 +185,7 @@ public class authentication extends ActionBarActivity implements View.OnClickLis
                     editor.putBoolean("nameNumberEntered", true);
                     editor.putBoolean("parseEntryDone", true);
                     editor.putInt("userRegistered", 0);
+                    editor.putString("imei", IMEI);
                     editor.commit();
 
                     progress.dismiss();
@@ -210,6 +217,7 @@ public class authentication extends ActionBarActivity implements View.OnClickLis
                     editor.putBoolean("nameNumberEntered", true);
                     editor.putBoolean("parseEntryDone", true);
                     editor.putInt("userRegistered", 0);
+                    editor.putString("imei", IMEI);
                     editor.commit();
 
                     progress.dismiss();
@@ -231,44 +239,68 @@ public class authentication extends ActionBarActivity implements View.OnClickLis
 
 
     private void checkPermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                android.Manifest.permission.READ_PHONE_STATE)
-                != PackageManager.PERMISSION_GRANTED) {
-
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.READ_PHONE_STATE},
                     MY_PERMISSIONS_REQUEST_READ_PHONE_STATE);
-        }else
+        }
+        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_READ_WRITE);
+        }*/
+        else
         {
             continueLaunch();
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_PHONE_STATE: {
+            case MY_PERMISSIONS_REQUEST_READ_PHONE_STATE:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     continueLaunch();
-
                 } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(authentication.this);
-                    builder.setCancelable(false);
-                    builder.setTitle("Permission Required");
-                    builder.setMessage("This permission is required to continue using the app.");
-                    builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            checkPermission();
-                        }
-                    });
-                    AlertDialog alert = builder.create();
-                    alert.show();
+                    if (!shouldShowRequestPermissionRationale(android.Manifest.permission.READ_PHONE_STATE))
+                    {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(authentication.this);
+                        builder.setCancelable(false);
+                        builder.setTitle("Permission Required");
+                        builder.setMessage("Read Phone State permission is used to uniquely identify the user. Redirecting to device settings, kindly allow permission.");
+                        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                intent.setData(uri);
+                                startActivityForResult(intent, REQUEST_PERMISSION_SETTING);
+                            }
+                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                    else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(authentication.this);
+                        builder.setCancelable(false);
+                        builder.setTitle("Permission Required");
+                        builder.setMessage("This permission is required to continue using the app.");
+                        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                                checkPermission();
+                            }
+                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    }
                 }
-            }
+                break;
         }
     }
 
@@ -290,5 +322,13 @@ public class authentication extends ActionBarActivity implements View.OnClickLis
         parseContent = new ParseContent(this);
 
         checkIMEI();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == REQUEST_PERMISSION_SETTING) {
+            checkPermission();
+        }
     }
 }

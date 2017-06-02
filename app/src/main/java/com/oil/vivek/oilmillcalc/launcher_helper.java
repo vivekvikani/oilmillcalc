@@ -1,15 +1,19 @@
 package com.oil.vivek.oilmillcalc;
 
+import android.*;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -27,11 +31,12 @@ public class launcher_helper extends ActionBarActivity implements AsyncTaskCompl
      private ParseContent parseContent;
     boolean nameNumberEntered;
     SharedPreferences appdata;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if(true){
+        if(isGooglePlayServicesAvailable(this)){
             parseContent = new ParseContent(this);
             appdata = PreferenceManager.getDefaultSharedPreferences(this);
             nameNumberEntered = appdata.getBoolean("nameNumberEntered",false);

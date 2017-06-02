@@ -82,7 +82,7 @@ public class maize_reverse extends Fragment implements View.OnClickListener, Tex
                 s.setEnabled(false);
 
                 shareScreenShot obj = new shareScreenShot();
-                obj.shareScreenShotM(getView().findViewById(R.id.scrollView), (ScrollView) getView().findViewById(R.id.scrollView));
+                obj.shareScreenShotM(getView().findViewById(R.id.scrollView), (ScrollView) getView().findViewById(R.id.scrollView), getActivity());
                 startActivity(obj.shareIntent);
 
                 a2.requestFocus();

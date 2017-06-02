@@ -81,16 +81,15 @@ public class MainActivity extends ActionBarActivity
     public int userRegistered;
     public String operatorName;
     public String IMEI;
-    public String simID;
+    //public String simID;
     int daysLeft = 0;
     boolean isExpired = false;
-    private String locationString;
-
-    private LocationManager locationManager;
-    private LocationListener locationListener;
-    boolean network_enabled = false;
     private ParseContent parseContent;
     private ArrayList<HashMap<String, String>> alldetails;
+/*    private String locationString;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    boolean network_enabled = false;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,10 +121,10 @@ public class MainActivity extends ActionBarActivity
         parseContent = new ParseContent(this);
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         operatorName = telephonyManager.getNetworkOperatorName();
-        IMEI = telephonyManager.getDeviceId();
-        simID = telephonyManager.getSimSerialNumber();
 
         SharedPreferences appdata = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        IMEI = appdata.getString("imei","0");
+
         SharedPreferences.Editor editor = appdata.edit();
         editor.putString("keyUsed", "Trial WS version (Feb,2017)");
         editor.commit();
@@ -189,7 +188,6 @@ public class MainActivity extends ActionBarActivity
     private void checkDaysLeftonServer() {
         String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
 
-
         if (!AndyUtils.isNetworkAvailable(MainActivity.this)) {
             AndyUtils.showToast(
                     "Internet is not available!",
@@ -212,7 +210,7 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onTaskCompleted(String response, int serviceCode) {
-        Log.d("responsejson", response.toString());
+        //Log.d("responsejson", response.toString());
         switch (serviceCode) {
             case AndyConstants.ServiceCode.LOGIN:
 
@@ -227,10 +225,7 @@ public class MainActivity extends ActionBarActivity
                     editor.commit();
                 } else {
                     String msg = parseContent.getErrorCode(response);
-                    AndyUtils.showToast(
-                            msg,
-                            MainActivity.this);
-                    Log.d("msg", msg);
+                    Log.d("Login error", msg);
                 }
                 break;
             default:
@@ -246,50 +241,12 @@ public class MainActivity extends ActionBarActivity
         userRegistered = appdata.getInt("userRegistered", 0);
 
         if (userRegistered == 0) {
-            /*
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-                network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-            }
-
-            if (network_enabled) {
-                locationListener = new LocationListener() {
-                    public void onLocationChanged(Location location) {
-                        //             Log.d("loc", "Inside LocationChanged");
-                        locationString = location.toString();
-                        SharedPreferences appdata = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-                        String name = appdata.getString("userName", "");
-                        String number = appdata.getString("phnNumber", "");
-                        String key = appdata.getString("keyUsed", "");
-
-                        PostDataTask postDataTask = new PostDataTask();
-                        postDataTask.execute(URL, name, number, key, locationString, IMEI, simID, operatorName, VersionNumber);
-                        Log.d("loc", "POST CALLED");
-
-                        locationManager.removeUpdates(locationListener);
-                    }
-
-                    public void onStatusChanged(String provider, int status, Bundle extras) {
-                    }
-
-                    public void onProviderEnabled(String provider) {
-                    }
-
-                    public void onProviderDisabled(String provider) {
-                    }
-                };
-                // Register the listener with the Location Manager to receive location updates
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-            }
-            else
-            {
-            */
                 String name = appdata.getString("userName", "");
                 String number = appdata.getString("phnNumber", "");
                 String key = appdata.getString("keyUsed", "");
 
                 PostDataTask postDataTask = new PostDataTask();
-                postDataTask.execute(URL, name, number, key, "Location Disabled", IMEI, simID, operatorName, VersionNumber);
+                postDataTask.execute(URL, name, number, key, "Location Disabled", IMEI, "Sim ID", operatorName, VersionNumber);
                 Log.d("loc", "POST CALLED WITHOUT LOCATION");
         }
 

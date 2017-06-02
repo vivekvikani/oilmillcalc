@@ -80,13 +80,7 @@ public class groundnut_forward extends Fragment implements View.OnClickListener,
                 s.setEnabled(false);
 
                 shareScreenShot obj = new shareScreenShot();
-                obj.shareScreenShotM(getView().findViewById(R.id.scrollView), (ScrollView) getView().findViewById(R.id.scrollView));
-                startActivity(obj.shareIntent);
-
-                a2.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(a2, InputMethodManager.SHOW_IMPLICIT);
-                imm.showSoftInput(a2, InputMethodManager.HIDE_NOT_ALWAYS);
+                obj.shareScreenShotM(getView().findViewById(R.id.scrollView), (ScrollView) getView().findViewById(R.id.scrollView), getActivity());
                 break;
 
             case R.id.forwardRstBtn:

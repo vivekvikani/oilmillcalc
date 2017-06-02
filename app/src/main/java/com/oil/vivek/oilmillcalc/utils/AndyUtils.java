@@ -1,21 +1,10 @@
 package com.oil.vivek.oilmillcalc.utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
-import android.view.View;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import com.oil.vivek.oilmillcalc.aboutUs;
-
-
-/**
- * Created by Parsania Hardik on 19/01/2016.
- */
 public class AndyUtils {
 
     public static boolean isNetworkAvailable(Context context) {

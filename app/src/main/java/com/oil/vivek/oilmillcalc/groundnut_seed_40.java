@@ -80,7 +80,7 @@ public class groundnut_seed_40 extends Fragment implements View.OnClickListener,
                 s.setEnabled(false);
 
                 shareScreenShot obj = new shareScreenShot();
-                obj.shareScreenShotM(getView().findViewById(R.id.scrollView), (ScrollView) getView().findViewById(R.id.scrollView));
+                obj.shareScreenShotM(getView().findViewById(R.id.scrollView), (ScrollView) getView().findViewById(R.id.scrollView), getActivity());
                 startActivity(obj.shareIntent);
 
                 a2.requestFocus();
